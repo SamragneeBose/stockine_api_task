@@ -117,6 +117,10 @@ class _HomeState extends State<Home> {
                             style: OutlinedButton.styleFrom(
                               foregroundColor: Theme.of(context).colorScheme.secondary,
                               backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                              side: BorderSide(
+                                width: 3,
+                                color: Theme.of(context).colorScheme.secondary,
+                              )
                             ),
                             child: const Text(
                                 "Read More",

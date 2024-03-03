@@ -3,12 +3,10 @@ import 'package:flutter/material.dart';
 class Content extends StatelessWidget {
   final String text;
   final double size;
-  // final TextAlign align;
 
   const Content({
     required this.text,
     required this.size,
-    // this.align = TextAlign.left,
     super.key});
 
   @override

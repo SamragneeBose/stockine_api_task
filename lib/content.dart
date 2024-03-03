@@ -19,7 +19,7 @@ class Content extends StatelessWidget {
         text,
         // textAlign: align,
         style: TextStyle(
-          color: Colors.black,
+          color: Theme.of(context).colorScheme.onPrimary,
           fontSize: size,
         ),
       ),

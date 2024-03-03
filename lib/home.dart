@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert';
 import 'content.dart';
 
@@ -13,6 +14,7 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   Map? mapResponse;
   List? listResponse;
+  String msg = "No content available at the moment!";
 
   Future apiCall() async{
     http.Response response;
@@ -28,13 +30,18 @@ class _HomeState extends State<Home> {
       setState(() {
         mapResponse = json.decode(response.body);
         listResponse = mapResponse?['body'];
+        // print('Success');
       });
     }
     else
-    {
-
-    }
+      {
+        setState(() {
+          msg='Error: ${response.statusCode}';
+        });
+      }
   }
+
+
 
   @override
   void initState() {
@@ -48,36 +55,78 @@ class _HomeState extends State<Home> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Stockine"),
+        centerTitle: true,
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          apiCall();
+          },
+        backgroundColor: Theme.of(context).colorScheme.secondary,
+        foregroundColor: Theme.of(context).colorScheme.onSecondary,
+        child: const Icon(Icons.refresh),
       ),
       body: (listResponse == null)?
-      const SizedBox(
-        child: Text("No content available at the moment!"),
+      SizedBox(
+          child: Center(
+              child: Text(
+                  msg,
+                style: TextStyle(
+                  fontSize: 20,
+                  color: Theme.of(context).colorScheme.primary,
+                ),
+              ),
+          ),
       ) :
       Scrollbar(
         child: ListView.builder(
             itemCount: listResponse!.length,
             itemBuilder: (context, index) {
-              return Card(
-                color: Colors.amberAccent,
-                child: Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Content(
-                        text: listResponse![index]['title'].toString(),
-                        size: 24,
-                      ),
-                      Content(
-                        text: listResponse![index]['source'].toString(),
-                        size: 18,
-                      ),
-                      Content(
-                        text: listResponse![index]['pubDate'].toString(),
-                        size: 16,
-                        // align: TextAlign.right,
-                      ),
-                    ],
+              return Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Card(
+                  color: Theme.of(context).colorScheme.primary,
+                  child: Padding(
+                    padding: const EdgeInsets.all(10.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Content(
+                          text: listResponse![index]['title'].toString(),
+                          size: 24,
+                        ),
+                        Content(
+                          text: listResponse![index]['source'].toString(),
+                          size: 18,
+                        ),
+                        Content(
+                          text: listResponse![index]['pubDate'].toString(),
+                          size: 16,
+                        ),
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        OutlinedButton(
+                            onPressed: () => setState(() {
+                              launchUrl(
+                                Uri.parse(listResponse![index]['link'].toString()),
+                                mode: LaunchMode.externalApplication,
+                              );
+                            }),
+                            style: OutlinedButton.styleFrom(
+                              foregroundColor: Theme.of(context).colorScheme.secondary,
+                              backgroundColor: Theme.of(context).colorScheme.onSecondary,
+                            ),
+                            child: const Text(
+                                "Read More",
+                              style: TextStyle(
+                                fontSize: 20,
+                              ),
+                            ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
               );

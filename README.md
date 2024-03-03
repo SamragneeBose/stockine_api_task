@@ -66,6 +66,8 @@ response = await http.get(
 
 In case there are changes in the URL, you may refer to the `(Node.js) Axios` sample code to get the URL, `X-RapidAPI-Key` and `X-RapidAPI-Host`.
 
+**[Note:** This sample code snippet is _**NOT**_ required to run the code. I have added this as a reference for those who may struggle with API Integration **]**
+
 ![Sample Node.js code](https://github.com/SamragneeBose/stockine_api_task/assets/80643159/54ba5996-900f-4e3d-a6ef-590ec4fbf4cc)
 
 ## Packages used
